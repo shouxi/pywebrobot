@@ -29,8 +29,8 @@ def call_daily(scheduler, lst = []):
     scheduler.enter(inc, 0, call_daily, (scheduler, lst))
     
 def rebot(username, passwd):
-    rss_url = 'http://www.sciencenet.cn/xml/paper.aspx?di=0'
-    #rss_url = 'http://www.sciencenet.cn/xml/news.aspx?news=0'
+    #rss_url = 'http://www.sciencenet.cn/xml/news.aspx?di=0'
+    rss_url = 'http://www.sciencenet.cn/xml/news.aspx?news=0'
     
     
     cj_file = "robot-emuch-cookies.txt"

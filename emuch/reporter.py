@@ -63,9 +63,9 @@ def news2str(news):
 
 '''
 msg = {}
-msg['url'] = '/post.php?action=newthread&fid=198&topicsubmit=yes&ajaxframe_div=div_newthread' #硕博家园
+msg['url'] = '/post.php?action=newthread&fid=6' #休闲灌水
 msg['threadtype'] = '1' #交流贴
-msg['typeid'] = '80' #网络转载
+msg['typeid'] = '6' #他站转载
 msg['subject'] = u'标题'.encode('gbk')
 msg['body'] = u'正文'.encode('gbk')
 msg['keyword'] = ''
@@ -77,9 +77,9 @@ def get_sciencenet_news(url=None):
     if url is None: url = 'http://www.sciencenet.cn/xml/news.aspx?news=0'
     
     msg = {}
-    msg['url'] = '/post.php?action=newthread&fid=198&topicsubmit=yes&ajaxframe_div=div_newthread' #硕博家园
+    msg['url'] = '/post.php?action=newthread&fid=6' #休闲灌水
     msg['threadtype'] = '1' #交流贴
-    msg['typeid'] = '80' #网络转载
+    msg['typeid'] = '6' #他站转载
     msg['keyword'] = ''
 
     date = str(datetime.date.today() - datetime.timedelta(days = 1))
@@ -90,7 +90,7 @@ def get_sciencenet_news(url=None):
     
     body += ps
 
-    title_h = b'\xbf\xc6\xd1\xa7\xcd\xf8\xc3\xbf\xc8\xd5\xd0\xc2\xce\xc5\xbb\xe3\xd1\xa1'.decode('gbk') # u'科学网每日新闻汇选'
+    title_h = b'\xc3\xbf\xc8\xd5\xd0\xc2\xce\xc5'.decode('gbk') # u'每日新闻'
     title = '**{}**[{}~] {}'.format(title_h, date ,sub_title)
     
     msg['subject'] =  title.encode('gbk') 
