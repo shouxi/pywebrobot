@@ -1,0 +1,2 @@
+抓取学院网站(http://www.scie.uestc.edu.cn/index.php) 通知公告更新，生成RSS。
+Python 2.7实现， 托管在百度BAE上。
