@@ -67,16 +67,9 @@ def update_scie_news(watch_days = 7*24*60*60, newslist = {}):
             the_time = mktime(li.span.text)
             if the_time + watch_days > now:
                 newslist[href] = (li.a.text, the_time)
-
-    channel_info = {'title':u'电子科大通信学院通知公告订阅频道',
-                    'link': url,
-                    'description': u'订阅通知公告,重要信息不错过！目前转发"学院公告", "学生科", "研管科", "科研科" 4个栏目内容',
-                    'language': 'zh-cn',
-                    'generator': 'rss-spider by rossini',
-                    'docs': 'http://blogs.law.harvard.edu/tech/rss',
-                    }
+                
     global scie_rss
-    scie_rss = gen_rss(channel_info, newslist)
+    scie_rss = gen_rss(scie['channel_info'], newslist)
     return scie_rss
 
 def update_ee_news(watch_days = 7*24*60*60, newslist = {}):
@@ -102,15 +95,8 @@ def update_ee_news(watch_days = 7*24*60*60, newslist = {}):
             if the_time + watch_days > now:
                 newslist[href] = (li.a.text, the_time)
 
-    channel_info = {'title':u'电子科大电工学院通知公告订阅频道',
-                    'link': url,
-                    'description': u'订阅通知公告,重要信息不错过！目前只转发"教学公告（研究生）", "研究生（管理）", "科研公告" 3个栏目内容',
-                    'language': 'zh-cn',
-                    'generator': 'rss-spider by rossini',
-                    'docs': 'http://blogs.law.harvard.edu/tech/rss',
-                    }
     global ee_rss
-    ee_rss = gen_rss(channel_info, newslist)
+    ee_rss = gen_rss(ee['channel_info'], newslist)
     return ee_rss
 
 #generate the rss xml string from newslist
