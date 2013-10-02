@@ -7,14 +7,17 @@ if 'SERVER_SOFTWARE' in os.environ:
     from bae.api import logging
 else:
     import logging
-    
+
 from BeautifulSoup import BeautifulSoup
 from xml.dom import minidom
 
 from flask import Flask
 app = Flask(__name__)
 
+from config import  scie, ee
+
 scie_rss = "Hello"
+ee_rss = "hello"
 
 @app.route('/')
 def root():
@@ -25,15 +28,28 @@ def other(path):
     return "can not find: " + path
 
 @app.route('/get-scie-news.rss')
-def rss_scienews():
+def rss_scie_news():
     global scie_rss
     return scie_rss
 
-@app.route('/update-scie-news.cmd')
+@app.route('/get-ee-news.rss')
+def rss_ee_news():
+    global ee_rss
+    return ee_rss
+
+@app.route('/update-all-news.cmd')
+def update_all_news():
+    update_scie_news()
+    update_ee_news()
+    
+    return "Updated! at " + time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime())
+
+
 def update_scie_news(watch_days = 7*24*60*60, newslist = {}):
-    url = 'http://www.scie.uestc.edu.cn/'
-    url_header = url + 'main.php?action=list&catId='
-    catIds = ['14', '34', '73', '23']
+    url = scie['url']
+    url_header = scie['url_header']
+    pages = scie['pages']
+
     now = time.time()
     mktime = lambda x:time.mktime(time.strptime(x, "%Y-%m-%d %H:%M"))    
     
@@ -41,8 +57,8 @@ def update_scie_news(watch_days = 7*24*60*60, newslist = {}):
         if newslist[k][1] + watch_days < now:
             del newslist[k]
 
-    for catId in catIds:
-        html = urllib2.urlopen(url_header+catId).read()
+    for page in pages:
+        html = urllib2.urlopen(url_header+page).read()
         soup = BeautifulSoup(html)
         lilist = soup.find('ul', {'class':"newslist"}).findAll('li')
         for li in lilist:
@@ -51,20 +67,60 @@ def update_scie_news(watch_days = 7*24*60*60, newslist = {}):
             the_time = mktime(li.span.text)
             if the_time + watch_days > now:
                 newslist[href] = (li.a.text, the_time)
-    
+
+    channel_info = {'title':u'电子科大通信学院通知公告订阅频道',
+                    'link': url,
+                    'description': u'订阅通知公告,重要信息不错过！目前转发"学院公告", "学生科", "研管科", "科研科" 4个栏目内容',
+                    'language': 'zh-cn',
+                    'generator': 'rss-spider by rossini',
+                    'docs': 'http://blogs.law.harvard.edu/tech/rss',
+                    }
+    global scie_rss
+    scie_rss = gen_rss(channel_info, newslist)
+    return scie_rss
+
+def update_ee_news(watch_days = 7*24*60*60, newslist = {}):
+    url = ee['url']
+    url_header = ee['url_header']
+    pages = ee['pages']
+
+    now = time.time()
+    mktime = lambda x:time.mktime(time.strptime(x, "%Y-%m-%d %H:%M:%S"))
+
+    for k in newslist:
+        if newslist[k][1] + watch_days < now:
+            del newslist[k]
+
+    for page in pages:
+        html = urllib2.urlopen(url_header+page).read()
+        soup = BeautifulSoup(html)
+        lilist = soup.findAll('ul')[1].findAll('li')
+        for li in lilist:
+            href = url_header + li.a['href']
+            #utf-8
+            the_time = mktime(li.findAll('span')[1].text)
+            if the_time + watch_days > now:
+                newslist[href] = (li.a.text, the_time)
+
+    channel_info = {'title':u'电子科大电工学院通知公告订阅频道',
+                    'link': url,
+                    'description': u'订阅通知公告,重要信息不错过！目前只转发"教学公告（研究生）", "研究生（管理）", "科研公告" 3个栏目内容',
+                    'language': 'zh-cn',
+                    'generator': 'rss-spider by rossini',
+                    'docs': 'http://blogs.law.harvard.edu/tech/rss',
+                    }
+    global ee_rss
+    ee_rss = gen_rss(channel_info, newslist)
+    return ee_rss
+
+#generate the rss xml string from newslist
+def gen_rss(channel_info, newslist):
     doc = minidom.Document()
     rss = doc.createElement('rss')
     rss.setAttribute('version', '2.0')
     doc.appendChild(rss)
     
-    channel_info = {'title':u'电子科大通信学院通知公告订阅频道',
-                    'link': u'http://www.scie.uestc.edu.cn/',
-                    'description': u'订阅通知公告,重要信息不错过！目前只转发"学院公告", "学生科", "研管科", "科研科" 4个栏目内容',
-                    'language': 'zh-cn',
-                    'generator': 'rss-spider by rossini',
-                    'docs': 'http://blogs.law.harvard.edu/tech/rss',
-                    }
-    channel = genRSSItem(doc, channel_info, tag='channel')
+    channel = gen_rss_item(doc, channel_info, tag='channel')
     rss.appendChild(channel)
 
     mkpubDate = lambda t: time.strftime("%a, %d %b %Y %H:%M:%S CST", time.localtime(t))
@@ -74,12 +130,10 @@ def update_scie_news(watch_days = 7*24*60*60, newslist = {}):
                 'description': v[0], 
                 'pubDate': mkpubDate(v[1]),
                 'guid': k}
-        channel.appendChild(genRSSItem(doc, item))
-    global scie_rss
-    scie_rss = doc.toxml('utf-8')
-    return scie_rss
+        channel.appendChild(gen_rss_item(doc, item))
+    return doc.toprettyxml(encoding='utf-8')
 
-def genRSSItem(doc,  d, tag = 'item'):
+def gen_rss_item(doc,  d, tag = 'item'):
     item = doc.createElement(tag)
     for k, v in d.items():
         kk = doc.createElement(k)
@@ -89,7 +143,7 @@ def genRSSItem(doc,  d, tag = 'item'):
     return item
 
 def init():
-    update_scie_news()
+    update_all_news()
 
 if 'SERVER_SOFTWARE' in os.environ:
     from bae.core.wsgi import WSGIApplication
