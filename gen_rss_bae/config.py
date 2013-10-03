@@ -20,8 +20,8 @@ scie['channel_info']['description'] = u'订阅通知公告,重要信息不错过
 
 
 ee = {"url": 'http://www.ee.uestc.edu.cn/',
-      "url_header": 'http://www.ee.uestc.edu.cn/2011',
-      'pages':  ['/bksjx/gg/', '/yjsjx/gg/', '/ky/zn/', '/xsgz/bksgl/', '/xsgz/yjsgl/', '/kxyj/kygg/',],
+      "url_header": 'http://www.ee.uestc.edu.cn/2011/',
+      'pages':  ['bksjx/gg/', 'yjsjx/gg/', 'ky/zn/', 'xsgz/bksgl/', 'xsgz/yjsgl/', 'kxyj/kygg/',],
       'channel_info': dict(_channel_info),
       }
 ee['channel_info']['title'] = u'电子科大电工学院通知公告更新'

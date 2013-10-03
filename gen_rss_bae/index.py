@@ -45,7 +45,7 @@ def update_all_news():
     return "Updated! at " + time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime())
 
 
-def update_scie_news(watch_days = 7*24*60*60, newslist = {}):
+def update_scie_news(watch_days = 3*24*60*60, newslist = {}):
     url = scie['url']
     url_header = scie['url_header']
     pages = scie['pages']
@@ -72,7 +72,7 @@ def update_scie_news(watch_days = 7*24*60*60, newslist = {}):
     scie_rss = gen_rss(scie['channel_info'], newslist)
     return scie_rss
 
-def update_ee_news(watch_days = 7*24*60*60, newslist = {}):
+def update_ee_news(watch_days = 3*24*60*60, newslist = {}):
     url = ee['url']
     url_header = ee['url_header']
     pages = ee['pages']
