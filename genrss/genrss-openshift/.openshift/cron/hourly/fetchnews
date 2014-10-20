@@ -1,0 +1,4 @@
+#!/bin/bash
+#nohup python ${OPENSHIFT_REPO_DIR}/genrss.py > ${OPENSHIFT_LOG_DIR}/rss.log 2>&1 &
+python ${OPENSHIFT_REPO_DIR}/genrss.py
+

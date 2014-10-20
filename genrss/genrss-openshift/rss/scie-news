@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+	<channel>
+		<title>电子科大通信学院通知公告更新</title>
+		<language>zh-cn</language>
+		<generator>rss-spider by rossini</generator>
+		<docs>http://blogs.law.harvard.edu/tech/rss</docs>
+		<link>http://www.scie.uestc.edu.cn/</link>
+		<description>订阅通知公告,重要信息不错过！目前只转发&quot;学院公告&quot;, &quot;学生科&quot;, &quot;研管科&quot;, &quot;科研科&quot; 4个栏目内容</description>
+		<item>
+			<title>关于2014年女教职工妇科体检的通知</title>
+			<guid>http://www.scie.uestc.edu.cn/main.php?action=view&amp;id=14462</guid>
+			<link>http://www.scie.uestc.edu.cn/main.php?action=view&amp;id=14462</link>
+			<pubDate>Wed, 15 Oct 2014 13:39:00 CST</pubDate>
+			<description>关于2014年女教职工妇科体检的通知</description>
+		</item>
+	</channel>
+</rss>
+

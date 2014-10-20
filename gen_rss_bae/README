@@ -1,6 +1,0 @@
-抓取学院网站通知公告更新，生成RSS。
-Python 2.7实现， 托管在百度BAE上。
-
-目前关注的网站包括：
-+ 通信学院 http://www.scie.uestc.edu.cn/index.php
-+ 电工学院 http://www.ee.uestc.edu.cn
